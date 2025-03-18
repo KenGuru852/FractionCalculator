@@ -178,7 +178,7 @@ public class CalculatorUI extends JFrame {
                 System.out.println(Memory.read().denominator);
             }
             case "MC" -> {
-                Buffer.clear();
+                Memory.clear();
             }
             case "M+" -> {
                 try {
@@ -193,15 +193,17 @@ public class CalculatorUI extends JFrame {
             }
             case "=" -> {
                 try {
+                    String toHistory = currentText + "=";
                     FractionNumber result = Calculate.calculate(currentText + "=");
                     textField.setText(result.numerator + "|" + result.denominator);
+                    History.writeToFile(toHistory + result.numerator + "|" + result.denominator);
                 } catch (IllegalArgumentException e) {
                     JOptionPane.showMessageDialog(this, "Ошибка: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
     }
-
+    // 4/1 + 11/2 = 19/2
     private void copyInBuffer() {
         Buffer.copy(textField.getText());
     }
