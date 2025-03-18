@@ -8,6 +8,7 @@ import java.util.Stack;
 public class Calculate {
 
     private static String lastOperation = "";
+    private static FractionNumber lastOperand = new FractionNumber(0, 1);
     private static Stack<String> stack = new Stack<>();
     private static StringBuilder temp = new StringBuilder();
     private static Boolean isLast = false;
@@ -49,13 +50,21 @@ public class Calculate {
                     if (Objects.equals(stack.peek(), "=")) {
                         stack.pop();
                     }
-                    if (stack.size() > 1) {
+                    if (stack.size() == 2) {
+                        String operation = stack.pop();
+                        FractionNumber number = parseFraction(stack.pop());
+                        switch (operation) {
+                            case "+" -> stack.add(number.multiple(new FractionNumber(2, 1)).toString());
+                            case "-" -> stack.add(new FractionNumber(0, 1).toString());
+                            case "*" -> stack.add(number.square().toString());
+                            case "/" -> stack.add(new FractionNumber(1, 1).toString());
+                        }
+                    }
+                    if (stack.size() > 2) {
                         performOperation();
                         isLast = true;
-                        return parseFraction(stack.pop());
-                    } else {
-                        return parseFraction(stack.pop());
                     }
+                    return parseFraction(stack.pop());
                 } else if (!isAction) {
                     stack.add(String.valueOf(symbol));
                     isAction = true;
@@ -77,9 +86,8 @@ public class Calculate {
             case "*" -> stack.add(leftOperand.multiple(rightOperand).toString());
             case "/" -> stack.add(leftOperand.divide(rightOperand).toString());
         }
-        if (isLast) {
-            lastOperation = operation;
-        }
+        lastOperation = operation;
+        lastOperand = rightOperand;
     }
 
     private static FractionNumber parseFraction(String text) {
