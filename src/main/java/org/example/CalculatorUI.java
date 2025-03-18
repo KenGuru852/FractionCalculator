@@ -3,12 +3,10 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 
-import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
-import java.awt.*;
 
 public class CalculatorUI extends JFrame {
 
@@ -27,12 +25,11 @@ public class CalculatorUI extends JFrame {
         textField.setFont(new Font("Tahoma", Font.PLAIN, 40));
         add(textField, BorderLayout.NORTH);
 
-        // Ограничиваем ввод только цифрами, точкой и операторами
         ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
                     throws BadLocationException {
-                if (string.matches("[0-9+\\-*/|]+")) {
+                if (string.matches("[0-9+\\-*/|\\^]+")) {
                     super.insertString(fb, offset, string, attr);
                 }
             }
@@ -40,7 +37,7 @@ public class CalculatorUI extends JFrame {
             @Override
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
                     throws BadLocationException {
-                if (text.matches("[0-9+\\-*/|]+")) {
+                if (text.matches("[0-9+\\-*/|\\^]+")) {
                     super.replace(fb, offset, length, text, attrs);
                 }
             }
