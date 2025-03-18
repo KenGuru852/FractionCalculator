@@ -2,13 +2,17 @@ package org.example;
 
 public class Buffer {
 
-    private static FractionNumber currentBuffer = new FractionNumber(0, 1);
+    private static String currentBuffer = "";
 
-    public static void copy(FractionNumber toCopy){
+    public static void copy(String toCopy){
         currentBuffer = toCopy;
     }
 
-    public static FractionNumber read(){
+    public static String read(){
         return currentBuffer;
+    }
+
+    public static void clear(){
+        currentBuffer = "";
     }
 }
