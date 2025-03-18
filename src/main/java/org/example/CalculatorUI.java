@@ -168,17 +168,28 @@ public class CalculatorUI extends JFrame {
                 textField.setText("");
             }
             case "MR" -> {
-                String fromBuffer = Buffer.read();
-                textField.setText(currentText + fromBuffer);
+                FractionNumber fromMemory = Memory.read();
+                textField.setText(currentText + fromMemory.numerator + "|" + fromMemory.denominator);
             }
             case "MS" -> {
-                Buffer.copy(currentText);
+                Memory.save(parseFraction(currentText));
+                System.out.print(Memory.read().numerator);
+                System.out.print("/");
+                System.out.println(Memory.read().denominator);
             }
             case "MC" -> {
                 Buffer.clear();
             }
             case "M+" -> {
-                // TODO
+                try {
+                    FractionNumber currentValue = parseFraction(currentText);
+                    Memory.add(currentValue);
+                    System.out.print(Memory.read().numerator);
+                    System.out.print("/");
+                    System.out.println(Memory.read().denominator);
+                } catch (IllegalArgumentException e) {
+                    JOptionPane.showMessageDialog(this, "Ошибка: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+                }
             }
             case "=" -> {
                 // TODO
@@ -213,6 +224,20 @@ public class CalculatorUI extends JFrame {
 
         helpFrame.add(new JScrollPane(helpText), BorderLayout.CENTER);
         helpFrame.setVisible(true);
+    }
+
+    private FractionNumber parseFraction(String text) {
+        String[] parts = text.split("\\|");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Некорректный формат дроби. Используйте формат 'числитель|знаменатель'.");
+        }
+        try {
+            int numerator = Integer.parseInt(parts[0]);
+            int denominator = Integer.parseInt(parts[1]);
+            return new FractionNumber(numerator, denominator);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Некорректный формат числа.");
+        }
     }
 
     public static void main(String[] args) {
