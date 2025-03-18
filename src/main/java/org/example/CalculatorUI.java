@@ -192,7 +192,12 @@ public class CalculatorUI extends JFrame {
                 }
             }
             case "=" -> {
-                // TODO
+                try {
+                    FractionNumber result = Calculate.calculate(currentText + "=");
+                    textField.setText(result.numerator + "|" + result.denominator);
+                } catch (IllegalArgumentException e) {
+                    JOptionPane.showMessageDialog(this, "Ошибка: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }

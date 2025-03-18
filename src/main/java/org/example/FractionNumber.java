@@ -14,6 +14,16 @@ public class FractionNumber {
         optimize();
     }
 
+    public FractionNumber(String num, String den) {
+        if (Integer.parseInt(den) == 0) {
+            throw new IllegalArgumentException("Denominator cannot be zero.");
+        }
+        this.numerator = Integer.parseInt(num);
+        this.denominator = Integer.parseInt(den);
+        optimize();
+    }
+
+
     public FractionNumber add(FractionNumber left, FractionNumber right) {
         int newNumerator = left.numerator * right.denominator + right.numerator * left.denominator;
         int newDenominator = left.denominator * right.denominator;
@@ -30,12 +40,18 @@ public class FractionNumber {
         return new FractionNumber(newNumerator, newDenominator).optimize();
     }
 
-    public FractionNumber divide(FractionNumber left, FractionNumber right) {
+    public FractionNumber subtract(FractionNumber right) {
+        int newNumerator = this.numerator * right.denominator - right.numerator * this.denominator;
+        int newDenominator = this.denominator * right.denominator;
+        return new FractionNumber(newNumerator, newDenominator).optimize();
+    }
+
+    public FractionNumber divide(FractionNumber right) {
         if (right.numerator == 0) {
             throw new IllegalArgumentException("Cannot divide by zero.");
         }
-        int newNumerator = left.numerator * right.denominator;
-        int newDenominator = left.denominator * right.numerator;
+        int newNumerator = this.numerator * right.denominator;
+        int newDenominator = this.denominator * right.numerator;
         return new FractionNumber(newNumerator, newDenominator).optimize();
     }
 
@@ -45,17 +61,23 @@ public class FractionNumber {
         return new FractionNumber(newNumerator, newDenominator).optimize();
     }
 
-    public FractionNumber square(FractionNumber number) {
-        int newNumerator = number.numerator * number.numerator;
-        int newDenominator = number.denominator * number.denominator;
+    public FractionNumber multiple(FractionNumber right) {
+        int newNumerator = this.numerator * right.numerator;
+        int newDenominator = this.denominator * right.denominator;
         return new FractionNumber(newNumerator, newDenominator).optimize();
     }
 
-    public FractionNumber reverse(FractionNumber number) {
-        if (number.numerator == 0) {
+    public FractionNumber square() {
+        int newNumerator = this.numerator * this.numerator;
+        int newDenominator = this.denominator * this.denominator;
+        return new FractionNumber(newNumerator, newDenominator).optimize();
+    }
+
+    public FractionNumber reverse() {
+        if (this.numerator == 0) {
             throw new IllegalArgumentException("Cannot reverse a fraction with zero numerator.");
         }
-        return new FractionNumber(number.denominator, number.numerator).optimize();
+        return new FractionNumber(this.denominator, this.numerator).optimize();
     }
 
     private FractionNumber optimize() {
@@ -76,5 +98,10 @@ public class FractionNumber {
             a = temp;
         }
         return a;
+    }
+
+    @Override
+    public String toString(){
+        return (this.numerator + "|" + this.denominator);
     }
 }
