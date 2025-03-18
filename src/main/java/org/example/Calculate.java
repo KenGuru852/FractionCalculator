@@ -39,13 +39,15 @@ public class Calculate {
                 if (symbol == '^') {
                     FractionNumber number = parseFraction(stack.pop()).square();
                     stack.add(number.toString());
-                    System.out.println(number);
+                    //System.out.println(number);
                     lastOperation = "^";
+                    lastOperand = number;
                 } else if (symbol == '¿') {
                     FractionNumber number = parseFraction(stack.pop()).reverse();
                     stack.add(number.toString());
-                    System.out.println(number);
+                    //System.out.println(number);
                     lastOperation = "¿";
+                    lastOperand = number;
                 } else if (symbol == '=') {
                     if (Objects.equals(stack.peek(), "=")) {
                         stack.pop();
@@ -58,6 +60,17 @@ public class Calculate {
                             case "-" -> stack.add(new FractionNumber(0, 1).toString());
                             case "*" -> stack.add(number.square().toString());
                             case "/" -> stack.add(new FractionNumber(1, 1).toString());
+                            default -> {
+                            }
+                        }
+                    } else if (stack.size() == 1) {
+                        FractionNumber number = parseFraction(stack.pop());
+                        switch (lastOperation) {
+                            case "+" -> stack.add(number.add(lastOperand).toString());
+                            case "-" -> stack.add(number.subtract(lastOperand).toString());
+                            case "*" -> stack.add(number.multiple(lastOperand).toString());
+                            case "/" -> stack.add(number.divide(lastOperand).toString());
+                            case "^", "¿" -> stack.add(number.toString());
                         }
                     }
                     if (stack.size() > 2) {
